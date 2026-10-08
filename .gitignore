@@ -1,0 +1,34 @@
+# OS & Editor
+.DS_Store
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+venv/
+
+# Raw Medical Neuroimaging Data (Privacy & Large File Protection)
+ZBJ_T1/
+*.dcm
+*.nii
+*.nii.gz
+*.mgz
+
+# Large 3D Mesh Binaries (>100MB GitHub limit)
+# Note: Keep output/README.md and json reports tracked
+output/**/*.stl
+output/**/*.obj
+*.stl
+*.obj
+
+# Temporary / Scratch Files
+scratch/
+*.log
