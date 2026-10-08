@@ -144,9 +144,21 @@ def generate_hidden_bridge_lamp(
 def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(description="Export cerebrum lamp with hidden bridge and LED socket.")
-    parser.add_argument("--solid-cerebrum", type=Path, default=repo_root / "output" / "01_灯罩版_60mm_LED底孔" / "01_无小脑_端脑皮层灯罩" / "ZBJ_lamp_cerebrum_60mm_ultra_subdivided.stl")
-    parser.add_argument("--ribbon", type=Path, default=Path.home() / "brain_freesurfer_work" / "work" / "freesurfer" / "ZBJ_brain" / "mri" / "ribbon.mgz")
-    parser.add_argument("--out-dir", type=Path, default=repo_root / "output" / "01_灯罩版_60mm_LED底孔" / "01_无小脑_端脑皮层灯罩")
+    parser.add_argument(
+        "--solid-cerebrum",
+        type=Path,
+        default=repo_root / "output" / "01_lamp_models_60mm_led" / "01_cerebrum_only" / "ZBJ_lamp_cerebrum_60mm_ultra_subdivided.stl",
+    )
+    parser.add_argument(
+        "--ribbon",
+        type=Path,
+        default=Path.home() / "brain_freesurfer_work" / "work" / "freesurfer" / "ZBJ_brain" / "mri" / "ribbon.mgz",
+    )
+    parser.add_argument(
+        "--out-dir",
+        type=Path,
+        default=repo_root / "output" / "01_lamp_models_60mm_led" / "01_cerebrum_only",
+    )
     parser.add_argument("--led-dia", type=float, default=60.0)
     parser.add_argument("--name", type=str, default="ZBJ_lamp_cerebrum_60mm_hidden_bridge")
     args = parser.parse_args()

@@ -86,7 +86,7 @@ def export_whole_brain(cerebrum_stl: Path, aseg_mgz: Path, out_dir: Path, led_di
 def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(description="Export basic whole brain model from FreeSurfer aseg and pial mesh.")
-    parser.add_argument("--cerebrum", type=Path, default=repo_root / "output" / "03_科研原始表面" / "brain_pial_merged.stl")
+    parser.add_argument("--cerebrum", type=Path, default=repo_root / "output" / "03_scientific_raw_surfaces" / "brain_pial_merged.stl")
     parser.add_argument("--aseg", type=Path, default=Path.home() / "brain_freesurfer_work" / "work" / "freesurfer" / "ZBJ_brain" / "mri" / "aseg.mgz")
     parser.add_argument("--out-dir", type=Path, default=repo_root / "output")
     args = parser.parse_args()
