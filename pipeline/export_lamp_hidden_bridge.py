@@ -147,7 +147,7 @@ def main() -> None:
     parser.add_argument(
         "--solid-cerebrum",
         type=Path,
-        default=repo_root / "output" / "01_lamp_models_60mm_led" / "01_cerebrum_only" / "ZBJ_lamp_cerebrum_60mm_ultra_subdivided.stl",
+        default=repo_root / "output" / "01_lamp_shade_60mm_led" / "ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl",
     )
     parser.add_argument(
         "--ribbon",
@@ -157,7 +157,7 @@ def main() -> None:
     parser.add_argument(
         "--out-dir",
         type=Path,
-        default=repo_root / "output" / "01_lamp_models_60mm_led" / "01_cerebrum_only",
+        default=repo_root / "output" / "01_lamp_shade_60mm_led",
     )
     parser.add_argument("--led-dia", type=float, default=60.0)
     parser.add_argument("--name", type=str, default="ZBJ_lamp_cerebrum_60mm_hidden_bridge")

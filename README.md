@@ -154,15 +154,14 @@ $$\text{Cranial Aspect Ratio} = \frac{161.8\text{ mm}}{136.7\text{ mm}} \approx 
 
 ---
 
-## 📁 4. 3D Model Catalog & Asset Index
+## 📁 4. 3D Model Catalog & Curated Assets
 
-All generated meshes are categorized under [`output/`](./output/):
+The curated production meshes are categorized under [`output/`](./output/):
 
 | Category Directory | Key Model Asset | Mesh Format | Polygons / Faces | Characteristics & Use Cases |
 | :--- | :--- | :--- | :--- | :--- |
-| **`01_lamp_models_60mm_led`** | `ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl` | STL / OBJ | 1.154M / 2.308M | **【Top 3D Print Lamp Choice】** Concealed Corpus Callosum internal bridge, 2.5mm translucent shell, $\Phi 62\text{ mm} \times 45\text{ mm}$ LED base socket. |
-| **`02_solid_display_models`** | `ZBJ_solid_whole_brain_ultra_subdivided.stl` | STL / OBJ | 1.143M / 2.286M | **【Top Solid Sculpture Choice】** 100% solid watertight manifold. Continuous SDF anti-aliasing with natural cerebellar folia and horizontal fissures. |
-| **`03_scientific_raw_surfaces`** | `brain_pial_merged.stl` | STL | 262K / 524K | FreeSurfer original un-smoothed bilateral pial surfaces for research calculation. |
+| **`01_lamp_shade_60mm_led`** | `ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl` | STL / OBJ | 1.154M / 2.308M | **【Top 3D Print Lamp Choice】** Concealed Corpus Callosum internal bridge, 2.5mm translucent shell, $\Phi 62\text{ mm} \times 45\text{ mm}$ LED base socket. |
+| **`02_solid_whole_brain`** | `ZBJ_solid_whole_brain_ultra_subdivided.stl` | STL / OBJ | 1.143M / 2.286M | **【Top Solid Sculpture Choice】** 100% solid watertight manifold. Continuous SDF anti-aliasing with natural cerebellar folia and horizontal fissures. |
 
 ---
 

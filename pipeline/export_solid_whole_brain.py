@@ -185,8 +185,7 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(description="Export ultra-high resolution solid whole brain 3D model.")
     parser.add_argument("--surf-dir", type=Path, default=Path.home() / "brain_freesurfer_work" / "work" / "freesurfer" / "ZBJ_brain" / "surf")
-    parser.add_argument("--aseg", type=Path, default=Path.home() / "brain_freesurfer_work" / "work" / "freesurfer" / "ZBJ_brain" / "mri" / "aseg.mgz")
-    parser.add_argument("--out-dir", type=Path, default=repo_root / "output" / "02_solid_display_models" / "02_whole_brain_with_cerebellum")
+    parser.add_argument("--out-dir", type=Path, default=repo_root / "output" / "02_solid_whole_brain")
     parser.add_argument("--name", type=str, default="ZBJ_solid_whole_brain_ultra_subdivided")
     args = parser.parse_args()
 

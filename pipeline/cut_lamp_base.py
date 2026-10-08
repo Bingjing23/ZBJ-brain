@@ -58,7 +58,7 @@ def cut_lamp_base(in_stl: Path, out_stl: Path, led_dia_mm: float = 62.0, z_flat_
 def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(description="Precision Boolean cut on FreeSurfer pial surface for lamp mounting.")
-    parser.add_argument("--input", type=Path, default=repo_root / "output" / "03_scientific_raw_surfaces" / "brain_pial_merged.stl")
+    parser.add_argument("--input", type=Path, default=repo_root / "output" / "02_solid_whole_brain" / "ZBJ_solid_whole_brain_ultra_subdivided.stl")
     parser.add_argument("--output", type=Path, default=repo_root / "output" / "brain_lamp_pial_60mm_LED_base.stl")
     parser.add_argument("--led-dia", type=float, default=62.0)
     parser.add_argument("--z-flat", type=float, default=-28.0)
