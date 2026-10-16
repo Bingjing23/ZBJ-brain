@@ -13,6 +13,43 @@ It also serves as an immutable reference notebook archiving quantitative neuroan
 
 ---
 
+## ⚡ Quick Start: Generate & Print the Translucent Lampshade
+
+### Terminal Command to Generate the Lampshade (Copy & Paste CMD)
+
+```bash
+# 1. Clone the repository & enter directory
+git clone https://github.com/Bingjing23/ZBJ-brain.git
+cd ZBJ-brain
+
+# 2. Install required Python packages
+pip install -r pipeline/requirements.txt
+
+# 3. Generate the translucent lampshade model (outputs STL and OBJ)
+python pipeline/export_lamp_hidden_bridge.py \
+  --surf-dir "$HOME/brain_freesurfer_work/work/freesurfer/ZBJ_brain/surf" \
+  --ribbon "$HOME/brain_freesurfer_work/work/freesurfer/ZBJ_brain/mri/ribbon.mgz" \
+  --out-dir output/01_lamp_shade_60mm_led \
+  --led-dia 60.0
+
+# 💡 Or execute the automated helper script directly:
+# bash pipeline/make_lampshade.sh
+```
+
+### Direct 3D Printing (Ready-to-Print Meshes)
+* **Pre-generated Models**:
+  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl) (Binary STL · 2.308M faces · Watertight Manifold)
+  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj) (Wavefront OBJ with smooth vertex normals)
+* **Slicing Instructions for Maximum Translucency**:
+  1. **Material**: White PLA, Semi-Translucent Clear PLA, or Clear/Frosted SLA Resin.
+  2. **Infill**: **0% (Completely Hollow)**. Built-in 2.2~2.8mm hollow clearance wall allows soft, uniform light transmission.
+  3. **Wall Loops / Perimeters**: **3 ~ 4 loops** ($\approx 1.2 \sim 1.6\text{ mm}$ wall thickness).
+  4. **Orientation**: Place the flat circular base opening directly facing down on the build plate.
+  5. **Supports**: Enable **Tree / Organic Supports** set to **"On build plate only"** (do not let supports grow inside the cavity).
+  6. **Hardware Assembly**: Snap in any standard $\Phi 60\text{ mm}$ round puck light ($15 \sim 22\text{ mm}$ height) into the bottom $\Phi 62\text{ mm} \times 45\text{ mm}$ base socket.
+
+---
+
 ## 🌟 Key Highlights & Engineering Achievements
 
 1. **🏛️ Ultra-High-Resolution Solid Whole Brain (with Natural Folia & Fissures)**:
@@ -180,50 +217,8 @@ The curated production meshes are categorized under [`output/`](./output/):
 
 ---
 
-## 💻 6. Quick Start: How to Obtain & 3D Print the Translucent Lampshade
+## 💻 6. End-to-End Pipeline Execution (From Raw T1 MRI Scan)
 
-### ⚡ Complete Terminal Command to Generate the Lampshade (Copy & Paste CMD)
-
-Run the following complete command in your terminal to set up the environment and generate the production lampshade:
-
-```bash
-# 1. Clone the repository & enter directory
-git clone https://github.com/Bingjing23/ZBJ-brain.git
-cd ZBJ-brain
-
-# 2. Install required Python packages
-pip install -r pipeline/requirements.txt
-
-# 3. Generate the translucent lampshade model (outputs STL and OBJ)
-python pipeline/export_lamp_hidden_bridge.py \
-  --surf-dir "$HOME/brain_freesurfer_work/work/freesurfer/ZBJ_brain/surf" \
-  --ribbon "$HOME/brain_freesurfer_work/work/freesurfer/ZBJ_brain/mri/ribbon.mgz" \
-  --out-dir output/01_lamp_shade_60mm_led \
-  --led-dia 60.0
-
-# 💡 Or execute the automated helper script directly:
-# bash pipeline/make_lampshade.sh
-```
-
----
-
-### Option A: Direct 3D Printing (Fastest · No Code Required)
-If you do not need to recompute the geometry and simply want to 3D print the ready-to-print flagship models:
-* **Model Files**:
-  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl) (Binary STL · 2.308M faces · Watertight Manifold)
-  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj) (Wavefront OBJ with smooth vertex normals)
-
-#### 🖨️ Slicing Instructions for Maximum Translucency
-1. **Material**: Use **White PLA**, **Semi-Translucent Clear PLA**, or **Clear/Frosted SLA Resin**.
-2. **Infill**: Set to **0% (Completely Hollow)**. The 3D model already has a built-in 2.2~2.8mm hollow clearance wall. Adding infill will block the internal light rays!
-3. **Wall Loops / Perimeters**: Set to **3 ~ 4 loops** (giving a shell thickness of $\approx 1.2 \sim 1.6\text{ mm}$ for warm light diffusion).
-4. **Orientation**: Place the flat circular base opening directly facing down on the build plate.
-5. **Supports**: Enable **Tree / Organic Supports** set to **"On build plate only"**. Do not let supports grow inside the cavity.
-6. **Hardware Assembly**: Snap in any standard $\Phi 60\text{ mm}$ round puck light ($15 \sim 22\text{ mm}$ thickness, battery or USB rechargeable) into the bottom $\Phi 62\text{ mm} \times 45\text{ mm}$ base aperture.
-
----
-
-### Option B: End-to-End Execution from Raw T1 MRI Scan
 To process from an untouched raw T1-weighted 3D MRI volume (`T1.nii.gz`):
 
 ```bash
