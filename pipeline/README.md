@@ -48,3 +48,24 @@ pip install -r requirements.txt
 | `export_all_surfaces.py` | High-fidelity scientific pial surface exporter and geometry auditor | STL / JSON |
 | `export_fast_envelope.py` | Rapid alpha-shape brain envelope extraction | STL |
 | `cut_lamp_base.py` | Flat base plane trimmer and cylindrical socket cutter | STL |
+
+---
+
+## 🚀 Execution Guide
+
+### 1. Generate Translucent Lampshade Model
+```bash
+python export_lamp_hidden_bridge.py \
+  --surf-dir path/to/freesurfer/ZBJ_brain/surf \
+  --ribbon path/to/freesurfer/ZBJ_brain/mri/ribbon.mgz \
+  --out-dir ../output/01_lamp_shade_60mm_led \
+  --led-dia 60.0
+```
+
+### 2. Generate Solid Whole Brain Model
+```bash
+python export_solid_whole_brain.py \
+  --surf-dir path/to/freesurfer/ZBJ_brain/surf \
+  --aseg path/to/freesurfer/ZBJ_brain/mri/aseg.mgz \
+  --out-dir ../output/02_solid_whole_brain
+```

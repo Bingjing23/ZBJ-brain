@@ -54,10 +54,38 @@ def write_obj(manifold_obj: m3d.Manifold, path: Path) -> None:
     print(f"Exported OBJ: {path.name} ({path.stat().st_size/1e6:.1f}MB)")
 
 
+def load_cerebrum_mesh(solid_cerebrum_path: Path | None = None, surf_dir: Path | None = None) -> m3d.Manifold:
+    """Load cerebrum mesh either from an existing STL file or directly from FreeSurfer pial surfaces."""
+    if solid_cerebrum_path and solid_cerebrum_path.exists() and solid_cerebrum_path.is_file():
+        print(f"1. Loading outer cerebrum mesh from STL: {solid_cerebrum_path}...")
+        tri_outer = trimesh.load(str(solid_cerebrum_path))
+        return m3d.Manifold(m3d.Mesh(vert_properties=tri_outer.vertices.astype(np.float32), tri_verts=tri_outer.faces.astype(np.uint32)))
+
+    if surf_dir and surf_dir.exists():
+        lh_file = surf_dir / "lh.pial.smooth3" if (surf_dir / "lh.pial.smooth3").exists() else surf_dir / "lh.pial"
+        rh_file = surf_dir / "rh.pial.smooth3" if (surf_dir / "rh.pial.smooth3").exists() else surf_dir / "rh.pial"
+        if lh_file.exists() and rh_file.exists():
+            print(f"1. Loading and subdividing cerebrum from FreeSurfer surfaces: {lh_file.name}, {rh_file.name}...")
+            vl, fl = nib.freesurfer.read_geometry(str(lh_file))
+            vr, fr = nib.freesurfer.read_geometry(str(rh_file))
+            print("   Subdividing cortical mesh (Loop subdivision, 1 iteration)...")
+            vl_sub, fl_sub = trimesh.remesh.subdivide_loop(vl, fl, iterations=1)
+            vr_sub, fr_sub = trimesh.remesh.subdivide_loop(vr, fr, iterations=1)
+            v_c = np.vstack([vl_sub, vr_sub])
+            f_c = np.vstack([fl_sub, fr_sub + len(vl_sub)])
+            return m3d.Manifold(m3d.Mesh(vert_properties=v_c.astype(np.float32), tri_verts=f_c.astype(np.uint32)))
+
+    raise FileNotFoundError(
+        "Could not load cerebrum mesh. Please provide a valid --solid-cerebrum STL path "
+        "or a FreeSurfer --surf-dir containing lh.pial and rh.pial."
+    )
+
+
 def generate_hidden_bridge_lamp(
-    solid_cerebrum_path: Path,
+    solid_cerebrum_path: Path | None,
     ribbon_path: Path,
     out_dir: Path,
+    surf_dir: Path | None = None,
     led_dia_mm: float = 60.0,
     aperture_margin_mm: float = 2.0,
     base_name: str = "ZBJ_lamp_cerebrum_60mm_hidden_bridge",
@@ -65,9 +93,7 @@ def generate_hidden_bridge_lamp(
     t0 = time.time()
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"1. Loading outer solid cerebrum mesh from {solid_cerebrum_path}...")
-    tri_outer = trimesh.load(str(solid_cerebrum_path))
-    man_outer = m3d.Manifold(m3d.Mesh(vert_properties=tri_outer.vertices.astype(np.float32), tri_verts=tri_outer.faces.astype(np.uint32)))
+    man_outer = load_cerebrum_mesh(solid_cerebrum_path=solid_cerebrum_path, surf_dir=surf_dir)
 
     print(f"2. Generating localized central bridge from {ribbon_path}...")
     rib_img = nib.load(str(ribbon_path))
@@ -145,25 +171,41 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(description="Export cerebrum lamp with hidden bridge and LED socket.")
     parser.add_argument(
+        "--surf-dir",
+        type=Path,
+        default=Path.home() / "brain_freesurfer_work" / "work" / "freesurfer" / "ZBJ_brain" / "surf",
+        help="Path to FreeSurfer surf directory (containing lh.pial and rh.pial)",
+    )
+    parser.add_argument(
         "--solid-cerebrum",
         type=Path,
-        default=repo_root / "output" / "01_lamp_shade_60mm_led" / "ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl",
+        default=None,
+        help="Optional path to pre-existing solid cerebrum STL mesh",
     )
     parser.add_argument(
         "--ribbon",
         type=Path,
         default=Path.home() / "brain_freesurfer_work" / "work" / "freesurfer" / "ZBJ_brain" / "mri" / "ribbon.mgz",
+        help="Path to FreeSurfer ribbon.mgz",
     )
     parser.add_argument(
         "--out-dir",
         type=Path,
         default=repo_root / "output" / "01_lamp_shade_60mm_led",
+        help="Output directory for generated lamp STL and OBJ files",
     )
-    parser.add_argument("--led-dia", type=float, default=60.0)
-    parser.add_argument("--name", type=str, default="ZBJ_lamp_cerebrum_60mm_hidden_bridge")
+    parser.add_argument("--led-dia", type=float, default=60.0, help="Diameter of circular LED lamp base in mm (default: 60.0)")
+    parser.add_argument("--name", type=str, default="ZBJ_lamp_cerebrum_60mm_hidden_bridge", help="Base filename without extension")
     args = parser.parse_args()
 
-    generate_hidden_bridge_lamp(args.solid_cerebrum, args.ribbon, args.out_dir, args.led_dia, base_name=args.name)
+    generate_hidden_bridge_lamp(
+        solid_cerebrum_path=args.solid_cerebrum,
+        ribbon_path=args.ribbon,
+        out_dir=args.out_dir,
+        surf_dir=args.surf_dir,
+        led_dia_mm=args.led_dia,
+        base_name=args.name,
+    )
 
 
 if __name__ == "__main__":

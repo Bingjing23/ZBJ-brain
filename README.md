@@ -180,19 +180,58 @@ The curated production meshes are categorized under [`output/`](./output/):
 
 ---
 
-## 💻 6. Quick Start & Execution
+## 💻 6. Quick Start: How to Obtain & 3D Print the Translucent Lampshade
+
+You can obtain the translucent lampshade through three approaches depending on your starting point:
+
+---
+
+### Approach A: Direct 3D Printing (Fastest · No Code Required)
+If you just want to manufacture the lampshade immediately, use the pre-generated, verified production meshes:
+* **Model Files**:
+  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl) (Binary STL)
+  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj) (Wavefront OBJ with smooth vertex normals)
+
+#### 🖨️ Slicing Instructions for Maximum Translucency
+1. **Material**: Use **White PLA**, **Semi-Translucent Clear PLA**, or **Clear/Frosted SLA Resin**.
+2. **Infill**: Set to **0% (Completely Hollow)**. The 3D model already has a built-in 2.2~2.8mm hollow clearance wall. Adding infill will block the internal light rays!
+3. **Wall Loops / Perimeters**: Set to **3 ~ 4 loops** (giving a shell thickness of $\approx 1.2 \sim 1.6\text{ mm}$ for warm light diffusion).
+4. **Orientation**: Place the flat circular base opening directly facing down on the build plate.
+5. **Supports**: Enable **Tree / Organic Supports** set to **"On build plate only"**. Do not let supports grow inside the cavity.
+6. **Hardware Assembly**: Snap in any standard $\Phi 60\text{ mm}$ round puck light ($15 \sim 22\text{ mm}$ thickness, battery or USB rechargeable) into the bottom $\Phi 62\text{ mm} \times 45\text{ mm}$ base aperture.
+
+---
+
+### Approach B: Regenerate from FreeSurfer Outputs (~30 Seconds)
+If you have already run FreeSurfer reconstruction (or downloaded the subject data), you can regenerate the exact lampshade STL and OBJ in under 30 seconds:
 
 ```bash
-# 1. Clone repository
+# 1. Clone repository & install dependencies
 git clone git@github.com:Bingjing23/ZBJ-brain.git
 cd ZBJ-brain
-
-# 2. Install geometric processing dependencies
 pip install -r pipeline/requirements.txt
 
-# 3. Export ultra-high-resolution solid whole brain model
-python pipeline/export_solid_whole_brain.py --help
-
-# 4. Export concealed-bridge functional lampshade model
-python pipeline/export_lamp_hidden_bridge.py --help
+# 2. Run the lampshade exporter directly from FreeSurfer surface and ribbon files
+python pipeline/export_lamp_hidden_bridge.py \
+  --surf-dir path/to/freesurfer/ZBJ_brain/surf \
+  --ribbon path/to/freesurfer/ZBJ_brain/mri/ribbon.mgz \
+  --out-dir output/01_lamp_shade_60mm_led \
+  --led-dia 60.0
 ```
+This script will:
+1. Subdivide the pial cortex into ultra-high-resolution micro-folds;
+2. Generate the internal Corpus Callosum bridge to lock the hemispheres together;
+3. Carve the hollow inner light chamber and bottom 62mm circular puck socket;
+4. Output verified watertight `ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl` and `.obj`.
+
+---
+
+### Approach C: End-to-End Execution from Raw T1 MRI Scan
+To process from an untouched raw T1-weighted 3D MRI volume (`T1.nii.gz`):
+
+```bash
+# 1. Ensure Docker Desktop is running (or local FreeSurfer 7.4.1 is installed)
+# 2. Execute master pipeline script:
+bash pipeline/run_pipeline.sh path/to/your/T1.nii.gz
+```
+The master pipeline will execute `recon-all` cortical reconstruction, extract all pial surfaces and subcortical volumes, and automatically output both the translucent lampshade and the solid whole brain sculpture into `output/`.

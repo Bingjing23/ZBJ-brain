@@ -134,19 +134,25 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# 4. Export Surfaces to STL & Sync to OneDrive
+# 4. Generate Production 3D Printing Models (Translucent Lampshade & Solid Whole Brain)
 # ------------------------------------------------------------------------------
 echo ""
-echo " [INFO] Exporting reconstructed pial surfaces to binary STL..."
+echo " [INFO] Exporting Translucent Concealed-Bridge Lampshade model..."
+"$PYTHON_EXEC" "$SCRIPT_DIR/export_lamp_hidden_bridge.py" \
+  --surf-dir "$SUBJECTS_DIR/$SUBJECT_ID/surf" \
+  --ribbon "$SUBJECTS_DIR/$SUBJECT_ID/mri/ribbon.mgz" \
+  --out-dir "$OUTPUT_DIR/01_lamp_shade_60mm_led" \
+  --led-dia 60.0
 
-"$PYTHON_EXEC" "$SCRIPT_DIR/export_all_surfaces.py" \
-  --subjects-dir "$SUBJECTS_DIR" \
-  --subject-id "$SUBJECT_ID" \
-  --output-dir "$WORK_DIR" \
-  --sync-to "$OUTPUT_DIR"
+echo ""
+echo " [INFO] Exporting Solid Whole Brain Sculpture model..."
+"$PYTHON_EXEC" "$SCRIPT_DIR/export_solid_whole_brain.py" \
+  --surf-dir "$SUBJECTS_DIR/$SUBJECT_ID/surf" \
+  --aseg "$SUBJECTS_DIR/$SUBJECT_ID/mri/aseg.mgz" \
+  --out-dir "$OUTPUT_DIR/02_solid_whole_brain"
 
 echo "================================================================="
 echo " Pipeline Complete!"
-echo " Exported STL files are in: $OUTPUT_DIR"
-ls -lh "$OUTPUT_DIR"
+echo " Production 3D models exported to: $OUTPUT_DIR"
+find "$OUTPUT_DIR" -type f
 echo "================================================================="
