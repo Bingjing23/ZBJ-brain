@@ -43,8 +43,9 @@ pip install -r requirements.txt
 | Script | Purpose | Output Format |
 | :--- | :--- | :--- |
 | `run_pipeline.sh` | Master pipeline execution script (FreeSurfer recon-all + surface export) | Mesh / Logs |
-| `export_solid_whole_brain.py` | Complete solid whole brain with biomimetic cerebellar folia & corpus callosum | STL / OBJ |
+| `make_lampshade.sh` | One-command helper to generate the 60mm translucent lampshade | STL / OBJ |
 | `export_lamp_hidden_bridge.py` | Concealed-bridge LED lampshade with 60mm bottom socket | STL / OBJ |
+| `export_solid_whole_brain.py` | Complete solid whole brain with biomimetic cerebellar folia & corpus callosum | STL / OBJ |
 | `export_all_surfaces.py` | High-fidelity scientific pial surface exporter and geometry auditor | STL / JSON |
 | `export_fast_envelope.py` | Rapid alpha-shape brain envelope extraction | STL |
 | `cut_lamp_base.py` | Flat base plane trimmer and cylindrical socket cutter | STL |

@@ -182,14 +182,35 @@ The curated production meshes are categorized under [`output/`](./output/):
 
 ## 💻 6. Quick Start: How to Obtain & 3D Print the Translucent Lampshade
 
-You can obtain the translucent lampshade through three approaches depending on your starting point:
+### ⚡ Complete Terminal Command to Generate the Lampshade (Copy & Paste CMD)
+
+Run the following complete command in your terminal to set up the environment and generate the production lampshade:
+
+```bash
+# 1. Clone the repository & enter directory
+git clone https://github.com/Bingjing23/ZBJ-brain.git
+cd ZBJ-brain
+
+# 2. Install required Python packages
+pip install -r pipeline/requirements.txt
+
+# 3. Generate the translucent lampshade model (outputs STL and OBJ)
+python pipeline/export_lamp_hidden_bridge.py \
+  --surf-dir "$HOME/brain_freesurfer_work/work/freesurfer/ZBJ_brain/surf" \
+  --ribbon "$HOME/brain_freesurfer_work/work/freesurfer/ZBJ_brain/mri/ribbon.mgz" \
+  --out-dir output/01_lamp_shade_60mm_led \
+  --led-dia 60.0
+
+# 💡 Or execute the automated helper script directly:
+# bash pipeline/make_lampshade.sh
+```
 
 ---
 
-### Approach A: Direct 3D Printing (Fastest · No Code Required)
-If you just want to manufacture the lampshade immediately, use the pre-generated, verified production meshes:
+### Option A: Direct 3D Printing (Fastest · No Code Required)
+If you do not need to recompute the geometry and simply want to 3D print the ready-to-print flagship models:
 * **Model Files**:
-  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl) (Binary STL)
+  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl) (Binary STL · 2.308M faces · Watertight Manifold)
   * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj) (Wavefront OBJ with smooth vertex normals)
 
 #### 🖨️ Slicing Instructions for Maximum Translucency
@@ -202,31 +223,7 @@ If you just want to manufacture the lampshade immediately, use the pre-generated
 
 ---
 
-### Approach B: Regenerate from FreeSurfer Outputs (~30 Seconds)
-If you have already run FreeSurfer reconstruction (or downloaded the subject data), you can regenerate the exact lampshade STL and OBJ in under 30 seconds:
-
-```bash
-# 1. Clone repository & install dependencies
-git clone git@github.com:Bingjing23/ZBJ-brain.git
-cd ZBJ-brain
-pip install -r pipeline/requirements.txt
-
-# 2. Run the lampshade exporter directly from FreeSurfer surface and ribbon files
-python pipeline/export_lamp_hidden_bridge.py \
-  --surf-dir path/to/freesurfer/ZBJ_brain/surf \
-  --ribbon path/to/freesurfer/ZBJ_brain/mri/ribbon.mgz \
-  --out-dir output/01_lamp_shade_60mm_led \
-  --led-dia 60.0
-```
-This script will:
-1. Subdivide the pial cortex into ultra-high-resolution micro-folds;
-2. Generate the internal Corpus Callosum bridge to lock the hemispheres together;
-3. Carve the hollow inner light chamber and bottom 62mm circular puck socket;
-4. Output verified watertight `ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl` and `.obj`.
-
----
-
-### Approach C: End-to-End Execution from Raw T1 MRI Scan
+### Option B: End-to-End Execution from Raw T1 MRI Scan
 To process from an untouched raw T1-weighted 3D MRI volume (`T1.nii.gz`):
 
 ```bash
