@@ -13,40 +13,63 @@ It also serves as an immutable reference notebook archiving quantitative neuroan
 
 ---
 
-## ⚡ Quick Start: Generate & Print the Translucent Lampshade
+## ⚡ Quick Start: From Individual Brain T1 MRI (NIfTI) to 3D Printed Lampshade
 
-### Terminal Command to Generate the Lampshade (Copy & Paste CMD)
+> **Input**: Any individual's 3D structural T1-weighted MRI scan file (`your_T1.nii` or `your_T1.nii.gz`).  
+> **Output**: Production-ready translucent 3D lampshade (`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl` / `.obj`).
 
+---
+
+### 🚀 Complete Pipeline Commands: From Raw T1 NIfTI to Lampshade
+
+#### Step 1: Clone Repository & Setup Environment
 ```bash
-# 1. Clone the repository & enter directory
 git clone https://github.com/Bingjing23/ZBJ-brain.git
 cd ZBJ-brain
-
-# 2. Install required Python packages
 pip install -r pipeline/requirements.txt
-
-# 3. Generate the translucent lampshade model (outputs STL and OBJ)
-python pipeline/export_lamp_hidden_bridge.py \
-  --surf-dir "$HOME/brain_freesurfer_work/work/freesurfer/ZBJ_brain/surf" \
-  --ribbon "$HOME/brain_freesurfer_work/work/freesurfer/ZBJ_brain/mri/ribbon.mgz" \
-  --out-dir output/01_lamp_shade_60mm_led \
-  --led-dia 60.0
-
-# 💡 Or execute the automated helper script directly:
-# bash pipeline/make_lampshade.sh
 ```
 
-### Direct 3D Printing (Ready-to-Print Meshes)
-* **Pre-generated Models**:
-  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.stl) (Binary STL · 2.308M faces · Watertight Manifold)
-  * [**`output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj`**](./output/01_lamp_shade_60mm_led/ZBJ_lamp_cerebrum_60mm_hidden_bridge.obj) (Wavefront OBJ with smooth vertex normals)
-* **Slicing Instructions for Maximum Translucency**:
-  1. **Material**: White PLA, Semi-Translucent Clear PLA, or Clear/Frosted SLA Resin.
-  2. **Infill**: **0% (Completely Hollow)**. Built-in 2.2~2.8mm hollow clearance wall allows soft, uniform light transmission.
-  3. **Wall Loops / Perimeters**: **3 ~ 4 loops** ($\approx 1.2 \sim 1.6\text{ mm}$ wall thickness).
-  4. **Orientation**: Place the flat circular base opening directly facing down on the build plate.
-  5. **Supports**: Enable **Tree / Organic Supports** set to **"On build plate only"** (do not let supports grow inside the cavity).
-  6. **Hardware Assembly**: Snap in any standard $\Phi 60\text{ mm}$ round puck light ($15 \sim 22\text{ mm}$ height) into the bottom $\Phi 62\text{ mm} \times 45\text{ mm}$ base socket.
+#### Step 2: Obtain Free FreeSurfer License (1-Minute Registration)
+FreeSurfer requires a valid license key (free for personal and research use):
+1. Register in 30 seconds: [FreeSurfer Registration](https://surfer.nmr.mgh.harvard.edu/registration.html)
+2. Save the 3-line license key received by email to: `~/brain_freesurfer_work/license.txt` (or `$HOME/license.txt`)
+
+#### Step 3: Run the Master Pipeline on Your T1 NIfTI File
+Execute the master automated script with your individual T1 NIfTI file:
+```bash
+# Usage: bash pipeline/run_pipeline.sh <path_to_T1.nii.gz> [subject_name]
+bash pipeline/run_pipeline.sh /path/to/your_T1.nii.gz my_brain
+```
+> **What this command automatically executes**:
+> 1. Auto-detects Docker Desktop (or native FreeSurfer 7.4.1) and runs `recon-all` cortical reconstruction;
+> 2. Extracts high-resolution pial surfaces and cortical ribbon masks;
+> 3. Executes `export_lamp_hidden_bridge.py`: applies Loop subdivision, integrates the internal anatomical Corpus Callosum structural bridge, hollows out the translucent inner chamber, and cuts the 60mm LED base aperture;
+> 4. Automatically exports the final verified watertight lampshade models to `output/01_lamp_shade_60mm_led/`.
+
+*(💡 Tip: FreeSurfer cortical reconstruction is computationally intensive and takes 4–8 hours. Run overnight or detached: `nohup bash pipeline/run_pipeline.sh /path/to/your_T1.nii.gz my_brain > pipeline.log 2>&1 &`)*
+
+---
+
+### ⚡ Fast Lane: If FreeSurfer Has Already Been Processed (~30 Seconds)
+If you already have processed FreeSurfer results for the subject (or are re-running geometry cuts):
+```bash
+python pipeline/export_lamp_hidden_bridge.py \
+  --surf-dir /path/to/freesurfer/my_brain/surf \
+  --ribbon /path/to/freesurfer/my_brain/mri/ribbon.mgz \
+  --out-dir output/01_lamp_shade_60mm_led \
+  --led-dia 60.0
+```
+
+---
+
+### 🖨️ Slicing Instructions for Maximum Translucency
+Once the STL is generated:
+1. **Material**: Use **White PLA**, **Semi-Translucent Clear PLA**, or **Clear/Frosted SLA Resin**.
+2. **Infill**: Set to **0% (Completely Hollow)**. The 3D model already has a built-in 2.2~2.8mm hollow clearance wall. Adding infill will block the internal light rays!
+3. **Wall Loops / Perimeters**: Set to **3 ~ 4 loops** (giving a shell thickness of $\approx 1.2 \sim 1.6\text{ mm}$ for warm light diffusion).
+4. **Orientation**: Place the flat circular base opening directly facing down on the build plate.
+5. **Supports**: Enable **Tree / Organic Supports** set to **"On build plate only"**. Do not let supports grow inside the cavity.
+6. **Hardware Assembly**: Snap in any standard $\Phi 60\text{ mm}$ round puck light ($15 \sim 22\text{ mm}$ thickness, battery or USB rechargeable) into the bottom $\Phi 62\text{ mm} \times 45\text{ mm}$ base socket.
 
 ---
 

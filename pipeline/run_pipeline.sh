@@ -24,7 +24,7 @@ OUTPUT_DIR="$BRAIN_DATA_DIR/output"
 WORK_BASE="${FREESURFER_WORK_DIR:-$HOME/brain_freesurfer_work}"
 WORK_DIR="$WORK_BASE/work"
 SUBJECTS_DIR="$WORK_DIR/freesurfer"
-SUBJECT_ID="ZBJ_brain"
+SUBJECT_ID="${2:-my_brain}"
 THREADS="${THREADS:-8}"
 PYTHON_EXEC="${PYTHON_EXEC:-$(which python3)}"
 
@@ -33,8 +33,9 @@ mkdir -p "$WORK_DIR" "$SUBJECTS_DIR" "$OUTPUT_DIR"
 echo "================================================================="
 echo " Starting MRI -> FreeSurfer -> STL Pipeline for: $SUBJECT_ID"
 echo " Time: $(date)"
+echo " Input T1 Volume: $INPUT_NII"
 echo " Workspace: $WORK_DIR"
-echo " OneDrive Target: $OUTPUT_DIR"
+echo " Output Target: $OUTPUT_DIR"
 echo "================================================================="
 
 # ------------------------------------------------------------------------------
@@ -74,8 +75,13 @@ if [ ! -f "$T1_GZ" ]; then
         echo " [ERROR] Input file not found: $INPUT_NII"
         exit 1
     fi
-    echo " [INFO] Compressing $INPUT_NII -> $T1_GZ ..."
-    gzip -c "$INPUT_NII" > "$T1_GZ"
+    if [[ "$INPUT_NII" =~ \.gz$ ]]; then
+        echo " [INFO] Copying compressed NIfTI: $INPUT_NII -> $T1_GZ ..."
+        cp "$INPUT_NII" "$T1_GZ"
+    else
+        echo " [INFO] Compressing NIfTI: $INPUT_NII -> $T1_GZ ..."
+        gzip -c "$INPUT_NII" > "$T1_GZ"
+    fi
     echo " [OK] T1.nii.gz prepared successfully."
 else
     echo " [OK] Found existing $T1_GZ ($(ls -lh "$T1_GZ" | awk '{print $5}'))"
